@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Meow Counter 😸</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f9f9f9; margin-top: 40px; }
+    input, button {
+      padding: 10px; font-size: 16px; margin: 8px; border: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    button { background: #4CAF50; color: white; cursor: pointer; }
+    button:hover { background: #45a049; }
+    ul { list-style: none; padding: 0; width: 320px; margin: auto; text-align: left; }
+    li { background: #fff; margin: 5px 0; padding: 6px 10px; border-left: 4px solid #4CAF50; }
+  </style>
+</head>
+<body>
+  <h1>Meow Counter 😸</h1>
+  <h2 id="score">Điểm: 0</h2>
+
+  <button onclick="meow()">Meow!</button>
+  <button onclick="reset()">Reset</button>
+
+  <ul id="log"><li>2/8/2025 13:26 — đạt 13 Meows</li><li>2/8/2025 21:00 — đạt 27 Meows</li><li>2/8/2025 21:00 — đạt 20 Meows</li><li>5/8/2025 18:19 — đạt 88 Meows</li><li>5/8/2025 18:19 — đạt 0 Meows</li></ul>
+
+  <script>
+    let score = localStorage.getItem("meowScore") ? parseInt(localStorage.getItem("meowScore")) : 0;
+    let logData = localStorage.getItem("meowLog") ? JSON.parse(localStorage.getItem("meowLog")) : [];
+
+    function updateUI() {
+      document.getElementById("score").innerText = `Điểm: ${score}`;
+      const logList = document.getElementById("log");
+      logList.innerHTML = "";
+      logData.forEach(entry => {
+        const li = document.createElement("li");
+        li.innerText = entry;
+        logList.appendChild(li);
+      });
+    }
+
+    function meow() {
+      score++;
+      localStorage.setItem("meowScore", score);
+      updateUI();
+    }
+
+    function reset() {
+      const now = new Date();
+      const timestamp = now.toLocaleDateString("vi-VN") + " " + now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+      logData.push(`${timestamp} — đạt ${score} Meows`);
+      score = 0;
+      localStorage.setItem("meowScore", score);
+      localStorage.setItem("meowLog", JSON.stringify(logData));
+      updateUI();
+    }
+
+    updateUI();
+  </script>
+
+</body>
+</html>
